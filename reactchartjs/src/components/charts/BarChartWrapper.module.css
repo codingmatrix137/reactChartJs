@@ -1,0 +1,18 @@
+.gridContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.chart {
+  grid-column: 1/2;
+}
+
+.textareaContainer {
+  grid-column: 2/3;
+}
+
+.buttonContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
