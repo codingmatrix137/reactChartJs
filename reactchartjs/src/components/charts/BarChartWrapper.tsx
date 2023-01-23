@@ -11,11 +11,12 @@ import {
   ChartOptions,
   ChartDataset,
 } from "chart.js";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Textarea from "../UI/Textarea";
 
 import classes from "./BarChartWrapper.module.css";
 import Button from "../UI/Button";
+import { DataContext, Months, OptionsContext } from "./BarChartContext";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -25,59 +26,9 @@ ChartJS.register(
   Legend
 );
 
-// Enum for months
-export enum Months {
-  January,
-  February,
-  March,
-  April,
-  May,
-  June,
-  July,
-  August,
-  September,
-  Octomber,
-  November,
-  December,
-}
-
 const BarChartWrapper = () => {
-
-  // Initial options for the chart
-  const options: ChartOptions<"bar"> = {
-    responsive: true,
-    maintainAspectRatio: true,
-    plugins: {
-      legend: {
-        position: "top" as const,
-      },
-      title: {
-        display: true,
-        text: "Chart.js Bar Chart",
-      },
-    },
-  };
-
-  // Initial labels for the chart
-  const labels = [Months[0], Months[1]];
-
-  // Initial data for the chart
-  const data: ChartData<"bar"> = {
-    labels,
-    datasets: [
-      {
-        label: "Dataset 1",
-        data: labels.map(() => Math.floor(Math.random() * 100)),
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
-      },
-      {
-        label: "Dataset 2",
-        data: labels.map(() => Math.floor(Math.random() * 100)),
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
-      },
-    ],
-  };
-
+  const options = useContext(OptionsContext);
+  const data = useContext(DataContext);
   // Using the useState hook to set the initial state of the bar chart options and data.
   const [barOptions, setBarOptions] = useState<ChartOptions<"bar">>(options);
   const [barData, setBarData] = useState<ChartData<"bar">>(data);
@@ -112,8 +63,8 @@ const BarChartWrapper = () => {
     const currentMaxMonth: string =
       barData && barData.labels
         ? (barData.labels[barData.labels?.length - 1] as string)
-        : Months[0]; //verify the current month 
-    if (currentMaxMonth !== Months[12]) {  
+        : Months[0]; //verify the current month
+    if (currentMaxMonth !== Months[12]) {
       const nextMonth: string =
         Object.keys(Months)[Object.keys(Months).indexOf(currentMaxMonth) + 1];
       //calculate the nextMonth based on the current month
@@ -127,14 +78,14 @@ const BarChartWrapper = () => {
         return {
           ...prevBarData,
           labels: [...(prevBarData.labels as unknown[]), nextMonth],
-          datasets: newDataSet,  //update the labels and datasets
+          datasets: newDataSet, //update the labels and datasets
         };
       });
-   
     }
   };
   const handleRemoveMonth = () => {
-    if (barData && barData.labels && barData.labels.length > 1) { //if we aren't in January
+    if (barData && barData.labels && barData.labels.length > 1) {
+      //if we aren't in January
       setBarData((prevBarData) => {
         const newDataSet = barData.datasets.map((dataset) => {
           return {
@@ -144,53 +95,59 @@ const BarChartWrapper = () => {
         });
         return {
           ...prevBarData,
-          labels: prevBarData && prevBarData.labels ? prevBarData.labels.slice(0, -1):[],
-          datasets: newDataSet,  //update the labels and datasets
+          labels:
+            prevBarData && prevBarData.labels
+              ? prevBarData.labels.slice(0, -1)
+              : [],
+          datasets: newDataSet, //update the labels and datasets
         };
       });
     }
   };
   return (
-    <div className={classes.gridContainer}>
-      <div className={classes.chart}>
-        <Bar options={barOptions} width={750} height={750} data={barData} /> 
-      </div>
+    <OptionsContext.Provider value={barOptions}>
+      <DataContext.Provider value={barData}>
+        <div className={classes.gridContainer}>
+          <div className={classes.chart}>
+            <Bar options={barOptions} width={750} height={750} data={barData} />
+          </div>
 
-      <div className={classes.textareaContainer}>
-        <Textarea
-          options={barOptions}
-          data={barData}
-          onOptionChange={handleOptionChange}
-          onDataChange={handleDataChange}
-        />
-      </div>
-      <div className={classes.buttonContainer}>
-        <Button
-          type="addDataset"
-          text="Add Dataset"
-          onClick={handleAddDataset}
-          disabled={false}
-        />
-        <Button
-          type="removeDataset"
-          text="Remove Dataset"
-          onClick={handleRemoveDataset}
-          disabled={barData.datasets.length === 1}
-        />
-        <Button
-          type="addMonth"
-          text="Add Month"
-          onClick={handleAddMonth}
-          disabled={barData.labels?.length === 12}
-        />
-        <Button
-          type="removeMonth"
-          text="Remove Month"
-          onClick={handleRemoveMonth}
-          disabled={barData.labels?.length === 1}
-        />
-      </div>
-    </div>
+          <div className={classes.textareaContainer}>
+            <Textarea
+            
+              onOptionChange={handleOptionChange}
+              onDataChange={handleDataChange}
+            />
+          </div>
+          <div className={classes.buttonContainer}>
+            <Button
+              type="addDataset"
+              text="Add Dataset"
+              onClick={handleAddDataset}
+              disabled={false}
+            />
+            <Button
+              type="removeDataset"
+              text="Remove Dataset"
+              onClick={handleRemoveDataset}
+              disabled={barData.datasets.length === 1}
+            />
+            <Button
+              type="addMonth"
+              text="Add Month"
+              onClick={handleAddMonth}
+              disabled={barData.labels?.length === 12}
+            />
+            <Button
+              type="removeMonth"
+              text="Remove Month"
+              onClick={handleRemoveMonth}
+              disabled={barData.labels?.length === 1}
+            />
+          </div>
+        </div>
+      </DataContext.Provider>
+    </OptionsContext.Provider>
   );
 };
 

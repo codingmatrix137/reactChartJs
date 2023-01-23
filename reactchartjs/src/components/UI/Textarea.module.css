@@ -1,7 +1,9 @@
 .textarea{
-    width: 685px;
-    height: 341px;
+    width: 30em;;
+    height: 26.5em;
     background-color: black;
+    margin: 5px;
+    margin-left: 50px;
     padding: 10px;
     border: none;
     resize: none;
