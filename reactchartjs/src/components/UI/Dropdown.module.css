@@ -1,0 +1,34 @@
+.dropdownContainer{
+    padding: 20px;
+}
+
+/* Add some hover effects to the select element */
+.dropdownSelect {
+    width: 50%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    font-size: 16px;
+    /* Add a transition effect for the border */
+    transition: border 0.5s ease-out;
+}
+
+/* Change the border color on hover */
+.dropdownSelect:hover {
+    border: 2px solid #3d3d3d;
+}
+
+/* Change the background color of the active option */
+.dropdownSelect option[value=activeOption] {
+    background-color: #3d3d3d;
+    color: #fff;
+}
+
+.activeOption{
+    font-size: 20px;
+    margin-top: 20px;
+    color: blue;
+}
