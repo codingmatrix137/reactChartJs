@@ -37,9 +37,7 @@ ChartJS.register(
 const BarChartWrapper = () => {
   const options = useOptions();
   const data = useData();
-  useEffect(() => {
-    console.log('Bar re-rendered with updated context');
-  }, [options, data]);
+
   const optionsDispatch = useOptionsDispach();
   const dataDispatch = useDataDispach();
   function handleAddDataset(): void {

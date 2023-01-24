@@ -123,7 +123,6 @@ function optionReducer(
 export const OptionsProvider: React.FC<AuxProps> = ({ children }) => {
   const [optionProv, dispatchOptionProv]: [ChartOptions<"bar">, Dispatch<any>] =
     useReducer(optionReducer, initialOptions);
-  console.log(optionProv);
   return (
     <OptionsContext.Provider value={optionProv}>
       <OptionDispachContext.Provider value={dispatchOptionProv}>
