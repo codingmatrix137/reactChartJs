@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useOptionsDispach } from "../context/OptionDataContext";
-import classes from "./DropDown.module.css";
+import classes from "./Dropdown.module.css";
 
 const Dropdown = () => {
   const [activeOption, setActiveOption] = useState("Vertical");

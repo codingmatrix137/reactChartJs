@@ -58,8 +58,8 @@ const ChartWrapper: React.FC<ChartType> = ({ type }) => {
         return (
           <Bar
             options={options as ChartOptions<"bar">}
-            width={750}
-            height={750}
+            width={700}
+            height={700}
             data={data as ChartData<"bar">}
           />
         );
@@ -67,17 +67,17 @@ const ChartWrapper: React.FC<ChartType> = ({ type }) => {
         return (
           <Line
             options={options as ChartOptions<"line">}
-            width={750}
-            height={750}
+            width={700}
+            height={700}
             data={data as ChartData<"line">}
           />
         );
       case ChartTypeEnum.pie:
         return (
-          <Pie width={750} height={750} data={data as ChartData<"pie">}></Pie>
+          <Pie width={700} height={700} data={data as ChartData<"pie">}></Pie>
         );
       case ChartTypeEnum.doughnut:
-      return <Doughnut width={750} height={750} data = {data as ChartData<'doughnut'>}></Doughnut>
+      return <Doughnut width={700} height={700} data = {data as ChartData<'doughnut'>}></Doughnut>
 
     }
   }
