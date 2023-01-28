@@ -1,6 +1,5 @@
-import { ChartData, ChartOptions } from "chart.js";
-import React, { useContext, useEffect, useState } from "react";
-import { useOptionsDispach } from "../charts/BarChartContext";
+import React, { useState } from "react";
+import { useOptionsDispach } from "../context/OptionDataContext";
 import classes from "./DropDown.module.css";
 
 const Dropdown = () => {

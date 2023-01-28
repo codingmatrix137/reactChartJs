@@ -10,10 +10,24 @@ const MainNavigation = () => {
         <ul>
           <li>
             <NavLink to='/barchart' className={navData => navData.isActive ? classes.active : '' }>
-              Bar Charts
+              Bar
             </NavLink>
           </li>
-
+            <li>
+            <NavLink to='/linechart' className={navData => navData.isActive ? classes.active : '' }>
+            Line
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to='/piechart' className={navData => navData.isActive ? classes.active : '' }>
+              Pie
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to='/doughnutchart' className={navData => navData.isActive ? classes.active : '' }>
+              Doughnut
+            </NavLink>
+          </li>
         </ul>
       </nav>
     </header>

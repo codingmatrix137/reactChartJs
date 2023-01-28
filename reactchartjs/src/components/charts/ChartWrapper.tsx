@@ -1,4 +1,4 @@
-import { Bar } from "react-chartjs-2";
+import { Bar, Doughnut, Line, Pie } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,36 +9,78 @@ import {
   Legend,
   ChartData,
   ChartOptions,
+  PointElement,
+  LineElement,
+  Filler,
+  ArcElement,
 } from "chart.js";
-import { useContext, useEffect, useState } from "react";
 import Textarea from "../UI/Textarea";
 
-import classes from "./BarChartWrapper.module.css";
+import classes from "./ChartWrapper.module.css";
 import Button from "../UI/Button";
 
 import Dropdown from "../UI/Dropdown";
 import {
-  DataProvider,
-  OptionsProvider,
   useData,
   useDataDispach,
   useOptions,
   useOptionsDispach,
-} from "./BarChartContext";
+} from "../context/OptionDataContext";
 ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  PointElement,
+  LineElement,
+  Filler,
+  ArcElement
 );
-
-const BarChartWrapper = () => {
+export enum ChartTypeEnum {
+  bar = "bar",
+  line = "line",
+  pie = "pie",
+  doughnut = "doughnut",
+}
+interface ChartType {
+  type: ChartTypeEnum;
+}
+const ChartWrapper: React.FC<ChartType> = ({ type }) => {
   const options = useOptions();
   const data = useData();
 
-  const optionsDispatch = useOptionsDispach();
+  let dislableOptions = false;
+  function getChartComponent(type: ChartTypeEnum) {
+    switch (type) {
+      case ChartTypeEnum.bar:
+        return (
+          <Bar
+            options={options as ChartOptions<"bar">}
+            width={750}
+            height={750}
+            data={data as ChartData<"bar">}
+          />
+        );
+      case ChartTypeEnum.line:
+        return (
+          <Line
+            options={options as ChartOptions<"line">}
+            width={750}
+            height={750}
+            data={data as ChartData<"line">}
+          />
+        );
+      case ChartTypeEnum.pie:
+        return (
+          <Pie width={750} height={750} data={data as ChartData<"pie">}></Pie>
+        );
+      case ChartTypeEnum.doughnut:
+      return <Doughnut width={750} height={750} data = {data as ChartData<'doughnut'>}></Doughnut>
+
+    }
+  }
   const dataDispatch = useDataDispach();
   function handleAddDataset(): void {
     if (dataDispatch) {
@@ -74,12 +116,10 @@ const BarChartWrapper = () => {
 
   return (
     <div className={classes.gridContainer}>
-      <div className={classes.chart}>
-        <Bar options={options} width={750} height={750} data={data} />
-      </div>
+      <div className={classes.chart}>{getChartComponent(type)}</div>
 
       <div className={classes.textareaContainer}>
-        <Textarea />
+        <Textarea dislableOptions={dislableOptions} />
       </div>
       <div className={classes.buttonContainer}>
         <Button
@@ -114,4 +154,4 @@ const BarChartWrapper = () => {
   );
 };
 
-export default BarChartWrapper;
+export default ChartWrapper;

@@ -1,14 +1,15 @@
-import { ChartOptions } from "chart.js";
-import { useState } from "react";
 import {
   useData,
   useDataDispach,
   useOptions,
   useOptionsDispach,
-} from "../charts/BarChartContext";
+} from "../context/OptionDataContext";
 import classes from "./Textarea.module.css";
 
-const Textarea = () => {
+interface TextareaProps {
+  dislableOptions: boolean;
+}
+const Textarea: React.FC<TextareaProps> = (props: TextareaProps) => {
   const options = JSON.stringify(useOptions(), null, 2);
   const data = JSON.stringify(useData(), null, 2);
   const optionsDispatch = useOptionsDispach();
@@ -31,15 +32,16 @@ const Textarea = () => {
       });
     }
   };
-
   return (
     <div>
-      <textarea
-        className={`${classes.textarea} ${classes.vs}`}
-        placeholder="Options"
-        value={options}
-        onChange={handleOptionChange}
-      />
+      {!props.dislableOptions && (
+        <textarea
+          className={`${classes.textarea} ${classes.vs}`}
+          placeholder="Options"
+          value={options}
+          onChange={handleOptionChange}
+        />
+      )}
       <textarea
         className={`${classes.textarea} ${classes.vs}`}
         placeholder="Data"

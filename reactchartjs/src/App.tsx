@@ -1,26 +1,27 @@
-import { Route, Routes, Navigate, Link } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import "./App.css";
-import { DataProvider, OptionsProvider } from "./components/charts/BarChartContext";
-import BarChartWrapper from "./components/charts/BarChartWrapper";
+import {
+  DataProvider,
+  OptionsProvider,
+} from "./components/context/OptionDataContext";
+import ChartWrapper, { ChartTypeEnum } from "./components/charts/ChartWrapper";
 import Layout from "./components/layout/Layout";
 
 function App() {
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<Navigate replace to="/barchart" />} />
-        <Route
-          path="/barchart"
-          element={
-            <DataProvider>
-              <OptionsProvider>
-                <BarChartWrapper />
-              </OptionsProvider>
-            </DataProvider>
-          }
-        ></Route>
-      </Routes>
-    </Layout>
+    <DataProvider>
+      <OptionsProvider>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Navigate replace to="/barchart" />} />
+            <Route path="/barchart" element={<ChartWrapper type={ChartTypeEnum.bar}/>}></Route>
+            <Route path="/linechart" element={<ChartWrapper type={ChartTypeEnum.line}/>}></Route>
+            <Route path="/piechart" element={<ChartWrapper type= {ChartTypeEnum.pie}/>}></Route>
+            <Route path="/doughnutchart" element={<ChartWrapper type = {ChartTypeEnum.doughnut}/>}></Route>
+          </Routes>
+        </Layout>
+      </OptionsProvider>
+    </DataProvider>
   );
 }
 

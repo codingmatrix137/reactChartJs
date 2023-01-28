@@ -1,4 +1,4 @@
-import { ChartData, ChartOptions } from "chart.js";
+import { ChartData, ChartOptions, ChartTypeRegistry } from "chart.js";
 import React, {
   createContext,
   type Dispatch,
@@ -25,15 +25,15 @@ interface AuxProps {
   children: React.ReactNode;
 }
 interface OptionAction {
-  type: "vertical" | "horizontal" | "stacked" | "custom";
-  modifiedOption?: ChartOptions<"bar">;
+  type: "vertical" | "horizontal" | "stacked" |  "custom";
+  modifiedOption?: ChartOptions<keyof ChartTypeRegistry>;
 }
 
 interface DataAction {
   type: "addDataset" | "removeDataset" | "addMonth" | "removeMonth" | "custom";
-  modifiedData?: ChartData<"bar">;
+  modifiedData?: ChartData<keyof ChartTypeRegistry>;
 }
-const initialOptions: ChartOptions<"bar"> = {
+const initialOptions: ChartOptions<keyof ChartTypeRegistry> = {
   responsive: true,
   maintainAspectRatio: true,
   indexAxis: "x" as const,
@@ -51,23 +51,24 @@ const initialOptions: ChartOptions<"bar"> = {
     },
     title: {
       display: true,
-      text: "Chart.js Bar Chart",
+      text: "Chart.js Chart",
     },
   },
 };
 // Initial options for the chart
-const OptionsContext = createContext<ChartOptions<"bar">>(initialOptions);
+const OptionsContext = createContext<ChartOptions<keyof ChartTypeRegistry>>(initialOptions);
 const OptionDispachContext = createContext<Dispatch<any> | undefined>(
   undefined
 );
 
 function optionReducer(
-  option: ChartOptions<"bar">,
+  option: ChartOptions<keyof ChartTypeRegistry>,
   action: OptionAction
-): ChartOptions<"bar"> {
+): ChartOptions<keyof ChartTypeRegistry> {
   switch (action.type) {
-    case "vertical": {
-      const newOptions = _.cloneDeep(option);
+    case "vertical":
+    {
+      const newOptions = _.cloneDeep(option) as ChartOptions<"bar">;
       if (
         newOptions.scales &&
         newOptions.scales.x &&
@@ -84,7 +85,7 @@ function optionReducer(
       return newOptions;
     }
     case "horizontal": {
-      const newOptions = _.cloneDeep(option);
+      const newOptions = _.cloneDeep(option) as ChartOptions<"bar">;
       if (
         newOptions.scales &&
         newOptions.scales.x &&
@@ -101,7 +102,7 @@ function optionReducer(
       return newOptions;
     }
     case "stacked": {
-      const newOptions = _.cloneDeep(option);
+      const newOptions = _.cloneDeep(option) as ChartOptions<"bar">;
       if (
         newOptions.scales &&
         newOptions.scales.x &&
@@ -121,7 +122,7 @@ function optionReducer(
   }
 }
 export const OptionsProvider: React.FC<AuxProps> = ({ children }) => {
-  const [optionProv, dispatchOptionProv]: [ChartOptions<"bar">, Dispatch<any>] =
+  const [optionProv, dispatchOptionProv]: [ChartOptions<keyof ChartTypeRegistry>, Dispatch<any>] =
     useReducer(optionReducer, initialOptions);
   return (
     <OptionsContext.Provider value={optionProv}>
@@ -140,15 +141,15 @@ export function useOptionsDispach() {
 }
 
 // Initial labels for the chart
-const labels = [Months[0], Months[1]];
+const labels = [Months[0]];
 // Initial data for the chart
-export const initialData: ChartData<"bar"> = {
+export const initialData: ChartData<keyof ChartTypeRegistry> = {
   labels: labels,
   datasets: [
     {
       label: "Dataset 1",
       data: labels.map(() => Math.floor(Math.random() * 100)),
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
+      backgroundColor: ["rgba(255, 99, 132, 0.5)"],
     },
     {
       label: "Dataset 2",
@@ -159,13 +160,13 @@ export const initialData: ChartData<"bar"> = {
 };
 
 // Initial options for the chart
-const DataContext = createContext<ChartData<"bar">>(initialData);
+const DataContext = createContext<ChartData<keyof ChartTypeRegistry>>(initialData);
 const DataDispachContext = createContext<Dispatch<any> | undefined>(undefined);
 
 function dataReducer(
-  data: ChartData<"bar">,
+  data: ChartData<keyof ChartTypeRegistry>,
   action: DataAction
-): ChartData<"bar"> {
+): ChartData<keyof ChartTypeRegistry> {
   switch (action.type) {
     case "addDataset": {
       const newData = _.cloneDeep(data);
@@ -235,7 +236,7 @@ function dataReducer(
   }
 }
 export const DataProvider: React.FC<AuxProps> = ({ children }) => {
-  const [dataProv, dispatchDataProv]: [ChartData<"bar">, Dispatch<any>] =
+  const [dataProv, dispatchDataProv]: [ChartData<keyof ChartTypeRegistry>, Dispatch<any>] =
     useReducer(dataReducer, initialData);
   return (
     <DataContext.Provider value={dataProv}>
