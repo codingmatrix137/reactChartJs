@@ -10,4 +10,5 @@ In order to run the project simply write: "npm run dev" and it will be up and ru
 
 ## Final product
 https://youtu.be/XTqFjRlwMXA
+
 https://react-chart-js-mrimpulse.vercel.app/barchart
